@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentAssertions;
-using VkNet.Abstractions.Core;
+using Moq.AutoMock;
 using VkNet.Exception;
 using VkNet.Infrastructure;
 using Xunit;
@@ -9,90 +9,147 @@ namespace VkNet.Tests
 {
 	public class VkApiVersionManagerTests
 	{
-		public VkApiVersionManagerTests()
-		{
-			Manager = new VkApiVersionManager();
-		}
-
-		private IVkApiVersionManager Manager { get; }
+		private readonly AutoMocker _mocker = new AutoMocker();
 
 		[Fact]
 		public void VersionIsNotEmpty()
 		{
-			Manager.Should().NotBeNull();
-			Manager.Version.Should().NotBeNullOrWhiteSpace();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+
+			service.Should().NotBeNull();
+			service.Version.Should().NotBeNullOrWhiteSpace();
 		}
 
 		[Fact]
 		public void VersionIsChanged()
 		{
-			Manager.SetVersion(999, 0);
-			Manager.Version.Should().Be("999.0");
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(999, 0);
+			service.Version.Should().Be("999.0");
 		}
 
 		[Fact]
 		public void IsGreaterThanOrEqual_GreaterValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsGreaterThanOrEqual(5, 93).Should().BeFalse();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsGreaterThanOrEqual(5, 93).Should().BeFalse();
 		}
 
 		[Fact]
 		public void IsGreaterThanOrEqual_EqualValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsGreaterThanOrEqual(5, 92).Should().BeTrue();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsGreaterThanOrEqual(5, 92).Should().BeTrue();
 		}
 
 		[Fact]
 		public void IsGreaterThanOrEqual_MinorLessValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsGreaterThanOrEqual(5, 91).Should().BeTrue();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsGreaterThanOrEqual(5, 91).Should().BeTrue();
 		}
 
 		[Fact]
 		public void IsGreaterThanOrEqual_MajorLessValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsGreaterThanOrEqual(4, 95).Should().BeTrue();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsGreaterThanOrEqual(4, 95).Should().BeTrue();
 		}
 
 		[Fact]
 		public void IsLessThanOrEqual_GreaterValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsLessThanOrEqual(5, 93).Should().BeTrue();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsLessThanOrEqual(5, 93).Should().BeTrue();
 		}
 
 		[Fact]
 		public void IsLessThanOrEqual_EqualValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsLessThanOrEqual(5, 92).Should().BeTrue();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsLessThanOrEqual(5, 92).Should().BeTrue();
 		}
 
 		[Fact]
 		public void IsLessThanOrEqual_MinorLessValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsLessThanOrEqual(5, 91).Should().BeFalse();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsLessThanOrEqual(5, 91).Should().BeFalse();
 		}
 
 		[Fact]
 		public void IsLessThanOrEqual_MajorLessValue()
 		{
-			Manager.SetVersion(5, 92);
-			Manager.IsLessThanOrEqual(4, 95).Should().BeFalse();
+			// arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
+
+			// act
+
+			// assert
+			service.SetVersion(5, 92);
+			service.IsLessThanOrEqual(4, 95).Should().BeFalse();
 		}
 
 		[Fact]
 		public void MinimalVersion_5_81_ShouldThrowException()
 		{
 			// Arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
 
 			// Act
-			Action action = () => Manager.SetVersion(5, 50);
+			Action action = () => service.SetVersion(5, 50);
 
 			// Assert
 			action.Should()
@@ -106,9 +163,10 @@ namespace VkNet.Tests
 		public void MinimalMajorVersion_5_ShouldThrowException()
 		{
 			// Arrange
+			var service = _mocker.CreateInstance<VkApiVersionManager>();
 
 			// Act
-			Action action = () => Manager.SetVersion(4, 50);
+			Action action = () => service.SetVersion(4, 50);
 
 			// Assert
 			action.Should()
